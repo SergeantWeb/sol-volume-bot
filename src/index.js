@@ -28,7 +28,7 @@ const swap = async (connection, wallet, input, output, amount) => {
 			wrapAndUnwrapSol: true,
 			dynamicComputeUnitLimit: true,
 			prioritizationFeeLamports: {
-				autoMultiplier: 3,
+				autoMultiplier: 2,
 			},
 		})
 	})
