@@ -45,7 +45,7 @@ const swap = async (connection, wallet, input, output, amount) => {
 	const rawTransaction = transaction.serialize()
 	const txid = await connection.sendRawTransaction(rawTransaction, {
 		skipPreflight: true,
-		maxRetries: 5
+		maxRetries: 100
 	});
 	try {
 		await connection.confirmTransaction(txid);
@@ -91,7 +91,10 @@ const app = async () => {
 
 		// Sell tx
 		console.info('ℹ️ Selling token...')
-		const txOut = await swap(connection, wallet, targetTokenPublicKey, solAddress, txIn.outAmount)
+		const txInAmountOut = parseInt(txIn.outAmount)
+		const amountOut = txInAmountOut - ((txInAmountOut / 100) * 0.02)
+		console.log('amountOut', amountOut)
+		const txOut = await swap(connection, wallet, targetTokenPublicKey, solAddress, amountOut.toFixed(0))
 		console.info('ℹ️ TXID:', txOut.txid ? txOut.txid : '')
 		if(txOut.txid) console.info(`https://solscan.io/tx/${txOut.txid}`)
 
